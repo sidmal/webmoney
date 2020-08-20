@@ -1,6 +1,6 @@
 # Client to communicate with WebMoney XML interfaces 
 
-[![Build Status](https://travis-ci.com/sidmal/webmoney.svg?branch=master)](https://travis-ci.com/sidmal/webmoney) 
+[![Build Status](https://travis-ci.org/github/sidmal/webmoney.svg?branch=master)](https://travis-ci.org/github/sidmal/webmoney) 
 [![codecov](https://codecov.io/gh/sidmal/webmoney/branch/master/graph/badge.svg)](https://codecov.io/gh/sidmal/webmoney)
 
 Go library to communicate with WebMoney XML interfaces.
