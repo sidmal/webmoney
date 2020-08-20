@@ -122,7 +122,7 @@ type GetBalanceResponse struct {
 type GetBalanceResponsePurse struct {
 	XMLName          xml.Name `xml:"purse"`
 	PurseName        string   `xml:"pursename"`
-	Amount           string   `xml:"amount"`
+	Amount           float32  `xml:"amount"`
 	Desc             string   `xml:"desc"`
 	OutsideOpen      string   `xml:"outsideopen"`
 	LastIncomeTxmId  string   `xml:"lastintr"`
