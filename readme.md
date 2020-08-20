@@ -1,6 +1,6 @@
 # WebMoney XML interfaces client 
 
-[![Build Status](https://travis-ci.com/sidmal/webmoney.svg?branch=master)](https://travis-ci.com/ProtocolONE/rabbitmq) 
+[![Build Status](https://travis-ci.com/sidmal/webmoney.svg?branch=master)](https://travis-ci.com/sidmal/webmoney) 
 [![codecov](https://codecov.io/gh/sidmal/webmoney/branch/master/graph/badge.svg)](https://codecov.io/gh/sidmal/webmoney)
 
 This library is client for WebMoney payment system XML interfaces.
