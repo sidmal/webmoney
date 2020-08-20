@@ -1,9 +1,9 @@
-# WebMoney XML interfaces client 
+# Client to communicate with WebMoney XML interfaces 
 
 [![Build Status](https://travis-ci.com/sidmal/webmoney.svg?branch=master)](https://travis-ci.com/sidmal/webmoney) 
 [![codecov](https://codecov.io/gh/sidmal/webmoney/branch/master/graph/badge.svg)](https://codecov.io/gh/sidmal/webmoney)
 
-This library is client for WebMoney payment system XML interfaces.
+Go library to communicate with WebMoney XML interfaces.
 This library currently realise next WebMoney XML interfaces:
 
 * X2 - transfer money between some wallets (method: **TransferMoney**)
