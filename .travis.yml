@@ -1,0 +1,16 @@
+language: go
+sudo: false
+go:
+- 1.14.x
+stages:
+- test
+jobs:
+  include:
+  - stage: test
+    env:
+    - GO111MODULE=on
+    install: true
+    script:
+    - go test ./... -coverprofile=coverage.out -covermode=atomic -p=1
+    after_success:
+    - bash <(curl -s https://codecov.io/bash)

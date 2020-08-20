@@ -1,6 +1,7 @@
 # WebMoney XML interfaces client 
 
-[![Build Status](https://travis-ci.com/ProtocolONE/rabbitmq.svg?branch=v1)](https://travis-ci.com/ProtocolONE/rabbitmq) [![codecov](https://codecov.io/gh/ProtocolONE/rabbitmq/branch/v1/graph/badge.svg)](https://codecov.io/gh/ProtocolONE/rabbitmq)
+[![Build Status](https://travis-ci.com/sidmal/webmoney.svg?branch=master)](https://travis-ci.com/ProtocolONE/rabbitmq) 
+[![codecov](https://codecov.io/gh/sidmal/webmoney/branch/master/graph/badge.svg)](https://codecov.io/gh/sidmal/webmoney)
 
 This library is client for WebMoney payment system XML interfaces.
 This library currently realise next WebMoney XML interfaces:
@@ -27,9 +28,9 @@ import (
 
 func main() {
     opts := []webmoney.Option{
-        webmoney.WmId("405002833238"),
-        webmoney.Key("gQABADCWZW2w1EMgHCYswfVPdf6MAAAAAAAAAEIADHN9yDTlBIQnJd4W/Rk+UDGhrYiYoC5yVGjSkV9GFSkLFKgMk2r2bJDnFUAub2sc9vjXbpkcUlS8QX60Ti83ECQXbomCybZS4zN/pO0IJU77H3FBeFOvjh32PLswJaEqKGCIgU7lydVsT7KBJd9vfNhYaRNVnbH5NQdF+nmDv373G+Ovt9Y="),
-        webmoney.Password("FvGqPdAy8reVWw789"),
+        webmoney.WmId("45612378901"),
+        webmoney.Key("MTIzNDU2Nzg5MA=="),
+        webmoney.Password("kvm_password"),
     }
     wm, err := webmoney.NewWebMoney(opts...)
     
