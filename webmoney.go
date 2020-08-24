@@ -103,9 +103,9 @@ type GetTransactionsHistoryRequest struct {
 }
 
 type GetTransactionsHistoryResponse struct {
-	XMLName       xml.Name                `xml:"operations"`
-	Count         int64                   `xml:"cnt,attr"`
-	OperationList []TransferMoneyResponse `xml:"operation"`
+	XMLName       xml.Name                 `xml:"operations"`
+	Count         int64                    `xml:"cnt,attr"`
+	OperationList []*TransferMoneyResponse `xml:"operation"`
 }
 
 type GetBalanceRequest struct {
@@ -114,9 +114,9 @@ type GetBalanceRequest struct {
 }
 
 type GetBalanceResponse struct {
-	XMLName   xml.Name                  `xml:"purses"`
-	Count     string                    `xml:"cnt,attr"`
-	PurseList []GetBalanceResponsePurse `xml:"purse"`
+	XMLName   xml.Name                   `xml:"purses"`
+	Count     string                     `xml:"cnt,attr"`
+	PurseList []*GetBalanceResponsePurse `xml:"purse"`
 }
 
 type GetBalanceResponsePurse struct {
