@@ -99,6 +99,15 @@ func (suite *WebmoneyTestSuite) TestWebMoney_NewWebMoney_NewSigner_Error() {
 	assert.Nil(suite.T(), wm)
 }
 
+func (suite *WebmoneyTestSuite) TestWebMoney_NewWebMoney_CaCert_IoUtil_ReadAll_Error() {
+	suite.defaultOptions = append(suite.defaultOptions, RootCaReader(&mocks.IoReaderError{}))
+	suite.defaultOptions = append(suite.defaultOptions, HttpClient(nil))
+	wm, err := NewWebMoney(suite.defaultOptions...)
+	assert.Error(suite.T(), err)
+	assert.EqualError(suite.T(), err, "SomeError")
+	assert.Nil(suite.T(), wm)
+}
+
 func (suite *WebmoneyTestSuite) TestWebMoney_TransferMoney_Ok() {
 	in := &TransferMoneyRequest{
 		TxnId:     1234567890,

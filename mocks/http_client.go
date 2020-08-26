@@ -3,27 +3,16 @@ package mocks
 import (
 	"errors"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 	"time"
 )
 
-type TransportStatusOk struct {
-	Transport http.RoundTripper
-}
-
-type TransportStatusWmError struct {
-	Transport http.RoundTripper
-}
-
-type TransportStatusError struct {
-	Transport http.RoundTripper
-}
-
-type TransportStatusErrorIoReader struct {
-	Transport http.RoundTripper
-}
-
+type TransportStatusOk http.Transport
+type TransportStatusWmError http.Transport
+type TransportStatusError http.Transport
+type TransportStatusErrorIoReader http.Transport
 type IoReaderError struct{}
 
 func NewTransportStatusOk() *http.Client {
@@ -71,6 +60,8 @@ func (m *TransportStatusOk) RoundTrip(req *http.Request) (*http.Response, error)
 			Header:     make(http.Header),
 		}, nil
 	}
+
+	log.Println(123)
 
 	return &http.Response{
 		StatusCode: http.StatusOK,
