@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/sidmal/webmoney/signer"
+	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding/charmap"
 	"io/ioutil"
 	"net/http"
@@ -51,6 +52,7 @@ type BaseResponse struct {
 	RequestNumber string      `xml:"reqn"`
 	Code          int         `xml:"retval"`
 	Reason        string      `xml:"retdesc"`
+	Server        string      `xml:"ser,omitempty"`
 	Response      interface{} `xml:",any"`
 }
 
@@ -144,11 +146,16 @@ func NewWebMoney(opts ...Option) (XMLInterface, error) {
 	}
 
 	webmoney := &WebMoney{
-		options:     options,
-		signer:      sig,
-		marshalFn:   xml.Marshal,
-		unMarshalFn: xml.Unmarshal,
-		httpClient:  options.httpClient,
+		options:   options,
+		signer:    sig,
+		marshalFn: xml.Marshal,
+		unMarshalFn: func(data []byte, v interface{}) error {
+			decoder := xml.NewDecoder(bytes.NewReader(data))
+			decoder.CharsetReader = charset.NewReaderLabel
+			err = decoder.Decode(v)
+			return err
+		},
+		httpClient: options.httpClient,
 	}
 
 	if options.rootCaReader == nil {
