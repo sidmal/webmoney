@@ -43,18 +43,6 @@ func Password(val string) Option {
 	}
 }
 
-func HttpClient(val *http.Client) Option {
-	return func(opts *Options) {
-		opts.httpClient = val
-	}
-}
-
-func RootCaReader(val io.Reader) Option {
-	return func(opts *Options) {
-		opts.rootCaReader = val
-	}
-}
-
 func Logger(val *zap.Logger) Option {
 	return func(opts *Options) {
 		opts.logger = val
@@ -64,5 +52,17 @@ func Logger(val *zap.Logger) Option {
 func LogClearFn(val func(req *http.Request) *http.Request) Option {
 	return func(opts *Options) {
 		opts.logClearFn = val
+	}
+}
+
+func httpClient(val *http.Client) Option {
+	return func(opts *Options) {
+		opts.httpClient = val
+	}
+}
+
+func rootCaReader(val io.Reader) Option {
+	return func(opts *Options) {
+		opts.rootCaReader = val
 	}
 }

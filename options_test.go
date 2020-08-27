@@ -9,8 +9,8 @@ import (
 )
 
 func TestWebmoneyOptions_Setters(t *testing.T) {
-	httpClient := &http.Client{}
-	rootCaReader := strings.NewReader(``)
+	httpCln := &http.Client{}
+	caReader := strings.NewReader(``)
 	logger, err := zap.NewProduction()
 	assert.NoError(t, err)
 	logClearFn := func(req *http.Request) *http.Request {
@@ -21,8 +21,8 @@ func TestWebmoneyOptions_Setters(t *testing.T) {
 		WmId("123456789012"),
 		Key("key"),
 		Password("password"),
-		HttpClient(httpClient),
-		RootCaReader(rootCaReader),
+		httpClient(httpCln),
+		rootCaReader(caReader),
 		Logger(logger),
 		LogClearFn(logClearFn),
 	}
@@ -36,8 +36,8 @@ func TestWebmoneyOptions_Setters(t *testing.T) {
 	assert.EqualValues(t, "123456789012", options.wmId)
 	assert.EqualValues(t, "key", options.key)
 	assert.EqualValues(t, "password", options.password)
-	assert.EqualValues(t, httpClient, options.httpClient)
-	assert.EqualValues(t, rootCaReader, options.rootCaReader)
+	assert.EqualValues(t, httpCln, options.httpClient)
+	assert.EqualValues(t, caReader, options.rootCaReader)
 	assert.EqualValues(t, logger, options.logger)
 	assert.NotNil(t, options.logClearFn)
 }
