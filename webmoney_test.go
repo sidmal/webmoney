@@ -7,6 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"go.uber.org/zap/zaptest/observer"
 	"net/url"
 	"testing"
 	"time"
@@ -22,6 +25,8 @@ type WebmoneyTestSuite struct {
 	suite.Suite
 	webmoney       *WebMoney
 	defaultOptions []Option
+	logObserver    *zap.Logger
+	zapRecorder    *observer.ObservedLogs
 }
 
 func Test_Webmoney(t *testing.T) {
@@ -33,7 +38,7 @@ func (suite *WebmoneyTestSuite) SetupTest() {
 		WmId(TestWmId),
 		Key(TestKey),
 		Password(TestPassword),
-		HttpClient(mocks.NewTransportStatusOk()),
+		httpClient(mocks.NewTransportStatusOk()),
 	}
 	wm, err := NewWebMoney(suite.defaultOptions...)
 
@@ -51,10 +56,16 @@ func (suite *WebmoneyTestSuite) SetupTest() {
 	assert.NotNil(suite.T(), wmt.marshalFn)
 
 	suite.webmoney = wmt
+
+	var core zapcore.Core
+
+	lvl := zap.NewAtomicLevel()
+	core, suite.zapRecorder = observer.New(lvl)
+	suite.logObserver = zap.New(core)
 }
 
 func (suite *WebmoneyTestSuite) TestWebMoney_NewWebMoney_HttpClientNotSet_Ok() {
-	suite.defaultOptions = append(suite.defaultOptions, HttpClient(nil))
+	suite.defaultOptions = append(suite.defaultOptions, httpClient(nil))
 	wm, err := NewWebMoney(suite.defaultOptions...)
 	assert.NoError(suite.T(), err)
 	assert.NotNil(suite.T(), wm)
@@ -96,6 +107,15 @@ func (suite *WebmoneyTestSuite) TestWebMoney_NewWebMoney_NewSigner_Error() {
 	wm, err := NewWebMoney(suite.defaultOptions...)
 	assert.Error(suite.T(), err)
 	assert.EqualError(suite.T(), err, "illegal base64 data at input byte 8")
+	assert.Nil(suite.T(), wm)
+}
+
+func (suite *WebmoneyTestSuite) TestWebMoney_NewWebMoney_CaCert_IoUtil_ReadAll_Error() {
+	suite.defaultOptions = append(suite.defaultOptions, rootCaReader(&mocks.IoReaderError{}))
+	suite.defaultOptions = append(suite.defaultOptions, httpClient(nil))
+	wm, err := NewWebMoney(suite.defaultOptions...)
+	assert.Error(suite.T(), err)
+	assert.EqualError(suite.T(), err, "SomeError")
 	assert.Nil(suite.T(), wm)
 }
 

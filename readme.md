@@ -23,14 +23,18 @@ package main
 
 import (
     "github.com/sidmal/webmoney"
+    "go.uber.org/zap"
     "log"
 )
 
 func main() {
+    logger, _ := zap.NewProduction()
+
     opts := []webmoney.Option{
         webmoney.WmId("45612378901"),
         webmoney.Key("MTIzNDU2Nzg5MA=="),
         webmoney.Password("kvm_password"),
+        webmoney.Logger(logger),
     }
     wm, err := webmoney.NewWebMoney(opts...)
     

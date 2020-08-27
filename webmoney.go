@@ -2,14 +2,17 @@ package webmoney
 
 import (
 	"bytes"
+	"crypto/x509"
 	"encoding/xml"
 	"errors"
 	"fmt"
 	"github.com/sidmal/webmoney/signer"
+	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding/charmap"
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -19,12 +22,6 @@ const (
 	operationGetBalance             = "Purses"
 
 	apiUrlMask = "https://w3s.webmoney.ru/asp/XML%s.asp"
-)
-
-var (
-	DefaultHttpClient = &http.Client{
-		Timeout: 10 * time.Second,
-	}
 )
 
 type XMLInterface interface {
@@ -55,6 +52,7 @@ type BaseResponse struct {
 	RequestNumber string      `xml:"reqn"`
 	Code          int         `xml:"retval"`
 	Reason        string      `xml:"retdesc"`
+	Server        string      `xml:"ser,omitempty"`
 	Response      interface{} `xml:",any"`
 }
 
@@ -148,15 +146,36 @@ func NewWebMoney(opts ...Option) (XMLInterface, error) {
 	}
 
 	webmoney := &WebMoney{
-		options:     options,
-		signer:      sig,
-		marshalFn:   xml.Marshal,
-		unMarshalFn: xml.Unmarshal,
-		httpClient:  options.httpClient,
+		options:   options,
+		signer:    sig,
+		marshalFn: xml.Marshal,
+		unMarshalFn: func(data []byte, v interface{}) error {
+			decoder := xml.NewDecoder(bytes.NewReader(data))
+			decoder.CharsetReader = charset.NewReaderLabel
+			err = decoder.Decode(v)
+			return err
+		},
+		httpClient: options.httpClient,
+	}
+
+	if options.rootCaReader == nil {
+		options.rootCaReader = strings.NewReader(rootCa)
 	}
 
 	if webmoney.httpClient == nil {
-		webmoney.httpClient = DefaultHttpClient
+		caCert, err := ioutil.ReadAll(options.rootCaReader)
+
+		if err != nil {
+			return nil, err
+		}
+
+		caCertPool := x509.NewCertPool()
+		caCertPool.AppendCertsFromPEM(caCert)
+
+		webmoney.httpClient = &http.Client{
+			Timeout:   10 * time.Second,
+			Transport: newHttpTransport(options.logger, options.logClearFn, caCertPool),
+		}
 	}
 
 	return webmoney, nil
