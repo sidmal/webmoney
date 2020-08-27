@@ -7,6 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"go.uber.org/zap/zaptest/observer"
 	"net/url"
 	"testing"
 	"time"
@@ -22,6 +25,8 @@ type WebmoneyTestSuite struct {
 	suite.Suite
 	webmoney       *WebMoney
 	defaultOptions []Option
+	logObserver    *zap.Logger
+	zapRecorder    *observer.ObservedLogs
 }
 
 func Test_Webmoney(t *testing.T) {
@@ -51,6 +56,12 @@ func (suite *WebmoneyTestSuite) SetupTest() {
 	assert.NotNil(suite.T(), wmt.marshalFn)
 
 	suite.webmoney = wmt
+
+	var core zapcore.Core
+
+	lvl := zap.NewAtomicLevel()
+	core, suite.zapRecorder = observer.New(lvl)
+	suite.logObserver = zap.New(core)
 }
 
 func (suite *WebmoneyTestSuite) TestWebMoney_NewWebMoney_HttpClientNotSet_Ok() {
