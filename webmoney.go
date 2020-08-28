@@ -10,6 +10,7 @@ import (
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding/charmap"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"strconv"
 	"strings"
@@ -267,7 +268,9 @@ func (m *WebMoney) GetBalance(in *GetBalanceRequest) (*GetBalanceResponse, error
 }
 
 func (m *WebMoney) getRequestNumber() string {
-	nanoseconds := fmt.Sprintf("%03.f", float64(time.Now().Nanosecond()/1000000))
+	rand.Seed(time.Now().UnixNano())
+	random := rand.Int() + time.Now().Nanosecond()/1000000
+	nanoseconds := fmt.Sprintf("%03.f", float64(random))
 	return time.Now().Local().Format("20060102150405") + nanoseconds
 }
 
