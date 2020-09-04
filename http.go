@@ -37,7 +37,8 @@ func newHttpTransport(
 func getTransport(caCertPool *x509.CertPool) http.RoundTripper {
 	transport := http.DefaultTransport
 	transport.(*http.Transport).TLSClientConfig = &tls.Config{
-		RootCAs: caCertPool,
+		Renegotiation: tls.RenegotiateOnceAsClient,
+		RootCAs:       caCertPool,
 	}
 	transport.(*http.Transport).DisableCompression = true
 	return transport
