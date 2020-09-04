@@ -21,7 +21,7 @@ const (
 	operationGetTransactionsHistory = "Operations"
 	operationGetBalance             = "Purses"
 
-	apiUrlMask = "https://w3s.webmoney.ru/asp/XML%s.asp"
+	apiUrlMask = "https://w10s.webmoney.ru/asp/XML%s.asp"
 )
 
 type XMLInterface interface {
@@ -169,12 +169,17 @@ func NewWebMoney(opts ...Option) (XMLInterface, error) {
 			return nil, err
 		}
 
-		caCertPool := x509.NewCertPool()
-		caCertPool.AppendCertsFromPEM(caCert)
+		rootCAs, _ := x509.SystemCertPool()
+
+		if rootCAs == nil {
+			rootCAs = x509.NewCertPool()
+		}
+
+		rootCAs.AppendCertsFromPEM(caCert)
 
 		webmoney.httpClient = &http.Client{
 			Timeout:   10 * time.Second,
-			Transport: newHttpTransport(options.logger, options.logClearFn, caCertPool),
+			Transport: newHttpTransport(options.logger, options.logClearFn, rootCAs),
 		}
 	}
 
