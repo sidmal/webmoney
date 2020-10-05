@@ -34,11 +34,10 @@ func newHttpTransport(
 	}
 }
 
-func getTransport(caCertPool *x509.CertPool) http.RoundTripper {
+func getTransport(_ *x509.CertPool) http.RoundTripper {
 	transport := http.DefaultTransport
 	transport.(*http.Transport).TLSClientConfig = &tls.Config{
 		Renegotiation:      tls.RenegotiateOnceAsClient,
-		RootCAs:            caCertPool,
 		InsecureSkipVerify: true,
 	}
 	transport.(*http.Transport).DisableCompression = true
