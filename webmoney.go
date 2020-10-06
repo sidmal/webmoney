@@ -21,7 +21,7 @@ const (
 	operationGetTransactionsHistory = "Operations"
 	operationGetBalance             = "Purses"
 
-	apiUrlMask = "https://w10s.webmoney.ru/asp/XML%s.asp"
+	apiUrlMask = "https://w3s.webmoney.ru/asp/XML%s.asp"
 )
 
 type XMLInterface interface {
